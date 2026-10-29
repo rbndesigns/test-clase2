@@ -12,48 +12,50 @@ async function obtenerResultados(page) {
 
     const clean = (value) => (value || '').replace(/\s+/g, ' ').trim();
     const isTeamHeading = (value) => /^Jornada\s+\d+/i.test(value);
-    const datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}(?:\s+.*)?$/;
+    // La FBM añade la hora, saltos de línea y a veces espacios no separables
+    // al texto de la fecha. Detectamos la fecha dentro de la celda, sin anclarla.
+    const datePattern = /\b\d{1,2}\/\d{1,2}\/\d{4}\b/;
     const scorePattern = /^\d+$/;
     const headingSelector = 'h1,h2,h3,h4,h5,h6';
     const resultados = [];
-    const competiciones = [...root.querySelectorAll('[id^="capa_competicion_calendario_"]')];
+    const tablas = [...root.querySelectorAll('table')];
 
-    for (const competicionNode of competiciones) {
+    for (const table of tablas) {
+      const competicionNode = table.closest('[id^="capa_competicion_calendario_"]') || root;
       const categoria = clean(competicionNode.querySelector(headingSelector)?.innerText);
-      const tables = [...competicionNode.querySelectorAll('table')];
+      const precedingHeadings = [...competicionNode.querySelectorAll(headingSelector)]
+        .filter((heading) => heading.compareDocumentPosition(table) & Node.DOCUMENT_POSITION_FOLLOWING);
+      const jornadaHeading = precedingHeadings.reverse().find((heading) => isTeamHeading(clean(heading.innerText)));
+      const jornada = clean(jornadaHeading?.innerText);
 
-      for (const table of tables) {
-        const precedingHeadings = [...competicionNode.querySelectorAll(headingSelector)]
-          .filter((heading) => heading.compareDocumentPosition(table) & Node.DOCUMENT_POSITION_FOLLOWING);
-        const jornadaHeading = precedingHeadings.reverse().find((heading) => isTeamHeading(clean(heading.innerText)));
-        const jornada = clean(jornadaHeading?.innerText);
+      for (const row of [...table.querySelectorAll('tr')]) {
+        const cells = [...row.querySelectorAll('th,td')].map((cell) => clean(cell.innerText));
+        const dateIndex = cells.findIndex((cell) => datePattern.test(cell));
+        if (dateIndex < 1) continue;
 
-        for (const row of [...table.querySelectorAll('tr')]) {
-          const cells = [...row.querySelectorAll('th,td')].map((cell) => clean(cell.innerText));
-          const dateIndex = cells.findIndex((cell) => datePattern.test(cell));
+        // Tomamos los dos nombres de equipo y los dos marcadores anteriores
+        // a la fecha. Esto tolera celdas vacías y cambios menores en la tabla.
+        const cellsBeforeDate = cells.slice(0, dateIndex).filter(Boolean);
+        const equipos = cellsBeforeDate.filter((cell) => !scorePattern.test(cell));
+        const puntos = cellsBeforeDate.filter((cell) => scorePattern.test(cell));
+        if (equipos.length !== 2 || puntos.length !== 2) continue;
 
-          // Los encuentros con marcador tienen Local, puntos local, puntos visitante,
-          // Visitante, Fecha y Campo. Los pendientes no tienen las dos celdas de puntos.
-          if (dateIndex !== 4 || cells.length < 6) continue;
+        const [equipoLocal, equipoVisitante] = equipos;
+        const [puntosLocal, puntosVisitante] = puntos;
+        const esEquipoHA = (equipo) => /HA\s*BASKET|HIGHSTEP\s*ACADEMY/i.test(equipo);
 
-          const equipoLocal = cells[0];
-          const puntosLocal = cells[1];
-          const puntosVisitante = cells[2];
-          const equipoVisitante = cells[3];
-          const esEquipoHA = (equipo) => /HA\s*BASKET|HIGHSTEP\s*ACADEMY/i.test(equipo);
+        if (!esEquipoHA(equipoLocal) && !esEquipoHA(equipoVisitante)) continue;
+        if (!scorePattern.test(puntosLocal) || !scorePattern.test(puntosVisitante)) continue;
 
-          if (!esEquipoHA(equipoLocal) && !esEquipoHA(equipoVisitante)) continue;
-          if (!scorePattern.test(puntosLocal) || !scorePattern.test(puntosVisitante)) continue;
+        const campo = cells[dateIndex + 1] || '';
+        const marcadorLocal = Number(puntosLocal);
+        const marcadorVisitante = Number(puntosVisitante);
+        const equipoHAEsLocal = esEquipoHA(equipoLocal);
 
-          const campo = cells[5] || '';
-          const marcadorLocal = Number(puntosLocal);
-          const marcadorVisitante = Number(puntosVisitante);
-          const equipoHAEsLocal = esEquipoHA(equipoLocal);
-
-          resultados.push({
+        resultados.push({
             categoria,
             jornada,
-            fecha: cells[dateIndex].match(/^\d{1,2}\/\d{1,2}\/\d{4}/)[0],
+            fecha: cells[dateIndex].match(/\d{1,2}\/\d{1,2}\/\d{4}/)[0],
             equipoLocal,
             puntosLocal: marcadorLocal,
             equipoVisitante,
@@ -67,8 +69,7 @@ async function obtenerResultados(page) {
             balance: equipoHAEsLocal
               ? marcadorLocal > marcadorVisitante ? 'victoria' : marcadorLocal < marcadorVisitante ? 'derrota' : 'empate'
               : marcadorVisitante > marcadorLocal ? 'victoria' : marcadorVisitante < marcadorLocal ? 'derrota' : 'empate'
-          });
-        }
+        });
       }
     }
 
