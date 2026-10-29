@@ -3,7 +3,79 @@ const fs = require('fs');
 const path = require('path');
 
 const URL_RESULTADOS = 'https://www.fbm.es/resultados-club-20677/highstep-academy';
+const URL_HORARIOS = 'https://www.fbm.es/es/horarios-y-resultados';
 const OUTPUT_FILE = path.join(__dirname, 'public', 'resultados.json');
+const SELECTORES_FBM = {
+  categoria: '#ctl00_ctl00_contenedor_informacion_contenedor_informacion_con_lateral_formulario_DDLCategorias',
+  fase: '#ctl00_ctl00_contenedor_informacion_contenedor_informacion_con_lateral_formulario_DDLFases',
+  grupo: '#ctl00_ctl00_contenedor_informacion_contenedor_informacion_con_lateral_formulario_DDLGrupos'
+};
+
+const COMPETICIONES = [
+  { nombre: '2ª Div Aut Masc BRONCE', fase: 'PRIMERA FASE', grupo: 'GRUPO 1' },
+  { nombre: 'Junior Masc. Pref.', fase: 'PRIMERA 4ª DIVISION', grupo: 'GRUPO 3' },
+  { nombre: 'Cadete Masc. Pref.', fase: 'PRIMERA 3ª DIVISION', grupo: 'GRUPO 3' },
+  { nombre: 'Infantil Masc. Pref.', fase: 'PRIMERA 2ª DIVISION', grupo: 'GRUPO 1' }
+];
+
+const normalizar = (value) => String(value || '')
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+async function seleccionarOpcion(page, selector, etiqueta) {
+  const value = await page.$eval(selector, (select, text) => {
+    const clean = (value) => (value || '').replace(/\s+/g, ' ').trim().toUpperCase();
+    return [...select.options].find(option => clean(option.text) === clean(text))?.value;
+  }, etiqueta);
+  if (!value) throw new Error(`No se encontró la opción FBM «${etiqueta}».`);
+
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => null),
+    page.select(selector, value)
+  ]);
+}
+
+async function obtenerEscudos(page, resultados) {
+  await page.goto(URL_HORARIOS, { waitUntil: 'networkidle2', timeout: 60000 });
+  await page.waitForSelector(SELECTORES_FBM.categoria, { timeout: 30000 });
+
+  const perfilesPorCompeticion = new Map();
+  for (const competicion of COMPETICIONES) {
+    await seleccionarOpcion(page, SELECTORES_FBM.categoria, competicion.nombre);
+    await seleccionarOpcion(page, SELECTORES_FBM.fase, competicion.fase);
+    await seleccionarOpcion(page, SELECTORES_FBM.grupo, competicion.grupo);
+    const perfiles = await page.$$eval('a[href*="/equipo-"]', links => links.map(link => ({
+      nombre: (link.innerText || '').replace(/\s+/g, ' ').trim(),
+      url: link.href
+    })).filter(perfil => perfil.nombre));
+    perfilesPorCompeticion.set(competicion.nombre, new Map(perfiles.map(perfil => [normalizar(perfil.nombre), perfil.url])));
+  }
+
+  const perfilPorEquipo = new Map();
+  for (const resultado of resultados) {
+    const competicion = COMPETICIONES.find(item => resultado.categoria.startsWith(item.nombre));
+    const perfiles = competicion && perfilesPorCompeticion.get(competicion.nombre);
+    for (const nombre of [resultado.equipoLocal, resultado.equipoVisitante]) {
+      const url = perfiles?.get(normalizar(nombre));
+      if (url) perfilPorEquipo.set(nombre, url);
+    }
+  }
+
+  const escudosPorPerfil = new Map();
+  for (const url of new Set(perfilPorEquipo.values())) {
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+    const escudo = await page.$eval('img[src*="/imagenes/clubes/"]', image => image.currentSrc || image.src).catch(() => '');
+    escudosPorPerfil.set(url, escudo);
+  }
+
+  const logos = new Map();
+  for (const [nombre, url] of perfilPorEquipo) logos.set(nombre, escudosPorPerfil.get(url) || '');
+  return resultados.map(resultado => ({
+    ...resultado,
+    escudoLocal: logos.get(resultado.equipoLocal) || '',
+    escudoVisitante: logos.get(resultado.equipoVisitante) || ''
+  }));
+}
 
 async function obtenerResultados(page) {
   return page.evaluate(() => {
@@ -139,7 +211,8 @@ async function obtenerResultados(page) {
       throw new Error(`No se encontraron resultados de HA Basket (${totalTablas} tablas, ${diagnostico.filasHA} filas HA, ${diagnostico.filasHAConFecha} con fecha). Se conserva el JSON anterior.`);
     }
 
-    resultados.sort((a, b) => {
+    const resultadosConEscudos = await obtenerEscudos(page, resultados);
+    resultadosConEscudos.sort((a, b) => {
       const [da, ma, ya] = a.fecha.split('/').map(Number);
       const [db, mb, yb] = b.fecha.split('/').map(Number);
       return new Date(yb, mb - 1, db) - new Date(ya, ma - 1, da);
@@ -149,11 +222,11 @@ async function obtenerResultados(page) {
     fs.writeFileSync(OUTPUT_FILE, JSON.stringify({
       actualizado: new Date().toISOString(),
       fuente: URL_RESULTADOS,
-      total: resultados.length,
-      resultados
+      total: resultadosConEscudos.length,
+      resultados: resultadosConEscudos
     }, null, 2) + '\n');
 
-    console.log(`✅ ${resultados.length} resultados guardados en public/resultados.json`);
+    console.log(`✅ ${resultadosConEscudos.length} resultados con escudos FBM guardados en public/resultados.json`);
   } catch (error) {
     console.error('❌ No se pudieron actualizar los resultados:', error.message);
     process.exitCode = 1;

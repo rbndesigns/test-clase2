@@ -45,8 +45,12 @@
     .round { margin-top:3px; color:var(--navy); font:600 14px 'Barlow Condensed',sans-serif; }
     .date { flex:none; color:var(--muted); font:700 13px 'Barlow Condensed',sans-serif; }
     .match { padding:17px 16px 14px; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:12px; }
-    .team { font:700 18px/1.1 'Barlow Condensed',sans-serif; overflow-wrap:anywhere; }
-    .team:last-child { text-align:right; }
+    .team-block { min-width:0; display:flex; align-items:center; gap:9px; }
+    .team-block.local { justify-content:flex-end; }
+    .team-block.visitor { justify-content:flex-start; }
+    .team-name { font:700 18px/1.1 'Barlow Condensed',sans-serif; overflow-wrap:anywhere; }
+    .team-block.local .team-name { text-align:right; }
+    .team-logo { width:40px; height:40px; flex:none; object-fit:contain; border-radius:50%; background:#fff; }
     .score { display:flex; align-items:center; gap:8px; padding:8px 11px; border-radius:7px; background:var(--navy); color:white; font:700 25px/1 'Barlow Condensed',sans-serif; white-space:nowrap; }
     .colon { opacity:.55; font-size:19px; }
     .badge { margin:0 16px 16px; display:inline-block; padding:4px 9px; border-radius:99px; background:#e8eaee; color:var(--muted); font:700 11px 'Barlow Condensed',sans-serif; letter-spacing:.7px; text-transform:uppercase; }
@@ -56,7 +60,7 @@
     .empty { grid-column:1/-1; padding:32px 18px; border:1px dashed var(--border); border-radius:10px; color:var(--muted); text-align:center; }
     footer { padding-top:18px; padding-bottom:24px; display:flex; justify-content:space-between; gap:16px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; }
     @keyframes appear { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    @media(max-width:560px) { header { align-items:flex-start; flex-direction:column; } .summary { align-items:stretch; flex-direction:column; } .team-filter { width:100%; } .team { font-size:16px; } .match { gap:8px; } .score { gap:6px; padding:8px; font-size:22px; } footer { flex-direction:column; } }
+    @media(max-width:560px) { header { align-items:flex-start; flex-direction:column; } .summary { align-items:stretch; flex-direction:column; } .team-filter { width:100%; } .match { gap:7px; padding:14px 10px 12px; } .team-block { gap:5px; } .team-name { font-size:16px; } .team-logo { width:30px; height:30px; } .score { gap:6px; padding:8px; font-size:22px; } footer { flex-direction:column; } }
   </style>
 </head>
 <body>
@@ -95,6 +99,17 @@
   <script>
     const esc = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
     const dateSort = (value) => { const [d,m,y] = value.split('/').map(Number); return new Date(y,m-1,d).getTime(); };
+    const escudosFBM = {
+      'HA BASKET': '20677', 'HA BASKET "A"': '20677', 'LOS NEGRALES´22': '20674',
+      'YELMO TEAM C.D.E.': '20678', 'COLMENAR VIEJO C': '6881', 'REVOLUTION': '16063',
+      'PSB PIRATAS': '13330', 'BALONCESTO DAGANZO 12 ISUZU REVEIN': '17760',
+      'BALONCESTO SAN FERNANDO': '6283', 'VALLEKAS BASKET C': '20525', 'CDEBSMV NEGRO': '19201',
+      'TRIPLE CHAMBERI': '20012', 'VILLAVICIOSA DE ODON A.B.': '6337', 'ONDA VERDE': '12493'
+    };
+    const escudoEquipo = (result, side) => result[`escudo${side}`]
+      || (escudosFBM[result[side === 'Local' ? 'equipoLocal' : 'equipoVisitante']]
+        ? `https://www.fbm.es/imagenes/clubes/${escudosFBM[result[side === 'Local' ? 'equipoLocal' : 'equipoVisitante']]}/logo.jpg`
+        : '');
     const equipoFilterKey = (result) => JSON.stringify([result.equipoHA, result.categoria]);
     function equipoFilterLabel(result) {
       const category = result.categoria || '';
@@ -104,9 +119,10 @@
     }
 
     function card(result, index) {
+      const logo = (src, name) => src ? `<img class="team-logo" src="${esc(src)}" alt="Escudo de ${esc(name)}" loading="lazy" onerror="this.hidden=true">` : '';
       return `<article class="result" style="animation-delay:${Math.min(index,12)*35}ms">
         <div class="result-top"><div><div class="category">${esc(result.categoria)}</div><div class="round">${esc(result.jornada || 'Jornada')}</div></div><time class="date">${esc(result.fecha)}</time></div>
-        <div class="match"><div class="team">${esc(result.equipoLocal)}</div><div class="score"><span>${esc(result.puntosLocal)}</span><span class="colon">:</span><span>${esc(result.puntosVisitante)}</span></div><div class="team">${esc(result.equipoVisitante)}</div></div>
+        <div class="match"><div class="team-block local"><span class="team-name">${esc(result.equipoLocal)}</span>${logo(escudoEquipo(result,'Local'),result.equipoLocal)}</div><div class="score"><span>${esc(result.puntosLocal)}</span><span class="colon">:</span><span>${esc(result.puntosVisitante)}</span></div><div class="team-block visitor">${logo(escudoEquipo(result,'Visitante'),result.equipoVisitante)}<span class="team-name">${esc(result.equipoVisitante)}</span></div></div>
         <span class="badge ${esc(result.balance)}">${esc(result.equipoHA)} · ${esc(result.balance)}</span>
       </article>`;
     }
