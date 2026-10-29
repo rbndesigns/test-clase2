@@ -27,7 +27,7 @@
     main { padding-top:32px; padding-bottom:48px; }
     .summary { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
     .stats { color:var(--muted); font-size:14px; }
-    .filter { min-width:180px; padding:10px 12px; border:1px solid var(--border); border-radius:6px; color:var(--navy); background:#fff; font:600 15px Barlow,sans-serif; }
+    .filter { min-width:220px; padding:10px 12px; border:1px solid var(--border); border-radius:6px; color:var(--navy); background:#fff; font:600 15px Barlow,sans-serif; }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr)); gap:14px; }
     .result { overflow:hidden; border:1px solid var(--border); border-radius:10px; background:var(--card); animation:appear .35s both; }
     .result-top { padding:13px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
@@ -82,6 +82,13 @@
   <script>
     const esc = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
     const dateSort = (value) => { const [d,m,y] = value.split('/').map(Number); return new Date(y,m-1,d).getTime(); };
+    const equipoFilterKey = (result) => JSON.stringify([result.equipoHA, result.categoria]);
+    function equipoFilterLabel(result) {
+      const category = result.categoria || '';
+      const level = /^(Junior|Cadete|Infantil)/i.exec(category)?.[1]
+        || (/^2ª\s*Div/i.test(category) ? 'Senior' : category);
+      return `${result.equipoHA} · ${level}`;
+    }
 
     function card(result, index) {
       return `<article class="result" style="animation-delay:${Math.min(index,12)*35}ms">
@@ -99,12 +106,15 @@
         if (!response.ok) throw new Error('No se pudo leer el archivo de resultados.');
         const data = await response.json();
         const resultados = [...(data.resultados || [])].sort((a,b) => dateSort(b.fecha) - dateSort(a.fecha));
-        const equipos = [...new Set(resultados.map(r => r.equipoHA))].sort((a,b) => a.localeCompare(b,'es'));
+        const equipos = [...new Map(resultados.map(result => [
+          equipoFilterKey(result),
+          { value: equipoFilterKey(result), label: equipoFilterLabel(result) }
+        ])).values()].sort((a,b) => a.label.localeCompare(b.label,'es'));
         const filtro = document.getElementById('filtro-equipo');
-        equipos.forEach(equipo => filtro.add(new Option(equipo,equipo)));
+        equipos.forEach(equipo => filtro.add(new Option(equipo.label,equipo.value)));
 
         const mostrar = () => {
-          const elegidos = resultados.filter(r => !filtro.value || r.equipoHA === filtro.value);
+          const elegidos = resultados.filter(r => !filtro.value || equipoFilterKey(r) === filtro.value);
           conteo.textContent = `${elegidos.length} resultado${elegidos.length === 1 ? '' : 's'} · ${equipos.length} equipo${equipos.length === 1 ? '' : 's'}`;
           grid.innerHTML = elegidos.length ? elegidos.map(card).join('') : '<div class="empty">No hay resultados para este equipo.</div>';
         };
