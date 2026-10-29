@@ -19,6 +19,14 @@ async function obtenerResultados(page) {
     const headingSelector = 'h1,h2,h3,h4,h5,h6';
     const resultados = [];
     const tablas = [...root.querySelectorAll('table')];
+    const diagnostico = {
+      filas: 0,
+      filasConFecha: 0,
+      filasHA: 0,
+      filasHAConFecha: 0,
+      filasCandidatasConMarcador: 0,
+      ejemplosHA: []
+    };
 
     for (const table of tablas) {
       const competicionNode = table.closest('[id^="capa_competicion_calendario_"]') || root;
@@ -29,8 +37,16 @@ async function obtenerResultados(page) {
       const jornada = clean(jornadaHeading?.innerText);
 
       for (const row of [...table.querySelectorAll('tr')]) {
+        diagnostico.filas++;
         const cells = [...row.querySelectorAll('th,td')].map((cell) => clean(cell.innerText));
         const dateIndex = cells.findIndex((cell) => datePattern.test(cell));
+        const tieneHA = cells.some((cell) => /HA\s*BASKET|HIGHSTEP\s*ACADEMY/i.test(cell));
+        if (dateIndex >= 1) diagnostico.filasConFecha++;
+        if (tieneHA) {
+          diagnostico.filasHA++;
+          if (dateIndex >= 1) diagnostico.filasHAConFecha++;
+          if (diagnostico.ejemplosHA.length < 8) diagnostico.ejemplosHA.push(cells);
+        }
         if (dateIndex < 1) continue;
 
         // Tomamos los dos nombres de equipo y los dos marcadores anteriores
@@ -38,6 +54,7 @@ async function obtenerResultados(page) {
         const cellsBeforeDate = cells.slice(0, dateIndex).filter(Boolean);
         const equipos = cellsBeforeDate.filter((cell) => !scorePattern.test(cell));
         const puntos = cellsBeforeDate.filter((cell) => scorePattern.test(cell));
+        if (tieneHA && equipos.length === 2 && puntos.length === 2) diagnostico.filasCandidatasConMarcador++;
         if (equipos.length !== 2 || puntos.length !== 2) continue;
 
         const [equipoLocal, equipoVisitante] = equipos;
@@ -73,7 +90,7 @@ async function obtenerResultados(page) {
       }
     }
 
-    return { totalTablas: root.querySelectorAll('table').length, resultados };
+    return { totalTablas: tablas.length, resultados, diagnostico };
   });
 }
 
@@ -93,11 +110,26 @@ async function obtenerResultados(page) {
     });
 
     await page.waitForSelector('#calendarios table', { timeout: 30000 });
-    const { totalTablas, resultados } = await obtenerResultados(page);
+    // Algunas páginas FBM pintan primero las jornadas y rellenan los marcadores
+    // después. Esperamos un resultado un tiempo acotado antes de darlo por vacío.
+    await page.waitForFunction(() => {
+      const root = document.querySelector('#calendarios');
+      if (!root) return false;
+      return [...root.querySelectorAll('tr')].some((row) => {
+        const cells = [...row.querySelectorAll('th,td')].map((cell) => (cell.innerText || '').replace(/\s+/g, ' ').trim());
+        const dateIndex = cells.findIndex((cell) => /\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(cell));
+        const beforeDate = cells.slice(0, dateIndex).filter(Boolean);
+        return dateIndex >= 1 && beforeDate.some((cell) => /HA\s*BASKET|HIGHSTEP\s*ACADEMY/i.test(cell))
+          && beforeDate.filter((cell) => /^\d+$/.test(cell)).length >= 2;
+      });
+    }, { timeout: 15000 }).catch(() => {});
+
+    const { totalTablas, resultados, diagnostico } = await obtenerResultados(page);
 
     if (!totalTablas) throw new Error('FBM no devolvió tablas de calendario.');
     if (!resultados.length) {
-      throw new Error('No se encontraron resultados de HA Basket. Se conserva el JSON anterior.');
+      console.error('🔎 Diagnóstico FBM:', JSON.stringify(diagnostico));
+      throw new Error(`No se encontraron resultados de HA Basket (${totalTablas} tablas, ${diagnostico.filasHA} filas HA, ${diagnostico.filasHAConFecha} con fecha). Se conserva el JSON anterior.`);
     }
 
     resultados.sort((a, b) => {
