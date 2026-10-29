@@ -12,9 +12,9 @@ async function obtenerResultados(page) {
 
     const clean = (value) => (value || '').replace(/\s+/g, ' ').trim();
     const isTeamHeading = (value) => /^Jornada\s+\d+/i.test(value);
-    // La FBM añade la hora, saltos de línea y a veces espacios no separables
-    // al texto de la fecha. Detectamos la fecha dentro de la celda, sin anclarla.
-    const datePattern = /\b\d{1,2}\/\d{1,2}\/\d{4}\b/;
+    // En Actions, FBM puede unir la hora al año (25/10/202612:45).
+    // Buscamos la fecha sin exigir separador después del año.
+    const datePattern = /\d{1,2}\/\d{1,2}\/\d{4}/;
     const scorePattern = /^\d+$/;
     const headingSelector = 'h1,h2,h3,h4,h5,h6';
     const resultados = [];
@@ -117,7 +117,7 @@ async function obtenerResultados(page) {
       if (!root) return false;
       return [...root.querySelectorAll('tr')].some((row) => {
         const cells = [...row.querySelectorAll('th,td')].map((cell) => (cell.innerText || '').replace(/\s+/g, ' ').trim());
-        const dateIndex = cells.findIndex((cell) => /\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(cell));
+        const dateIndex = cells.findIndex((cell) => /\d{1,2}\/\d{1,2}\/\d{4}/.test(cell));
         const beforeDate = cells.slice(0, dateIndex).filter(Boolean);
         return dateIndex >= 1 && beforeDate.some((cell) => /HA\s*BASKET|HIGHSTEP\s*ACADEMY/i.test(cell))
           && beforeDate.filter((cell) => /^\d+$/.test(cell)).length >= 2;
