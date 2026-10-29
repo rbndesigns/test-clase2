@@ -13,8 +13,9 @@
     * { box-sizing:border-box; margin:0; padding:0; }
     body { min-height:100vh; color:var(--navy); background:var(--bg); font-family:Barlow,Arial,sans-serif; }
     header { max-width:1120px; margin:auto; padding:18px clamp(20px,5vw,72px); display:flex; justify-content:space-between; align-items:center; gap:18px; border-bottom:1px solid var(--border); }
-    .brand { font:26px 'Bebas Neue',sans-serif; letter-spacing:2px; }
-    .brand span { color:var(--yellow); -webkit-text-stroke:1px var(--navy); }
+    .brand { display:flex; align-items:center; gap:10px; color:var(--navy); font:26px 'Bebas Neue',sans-serif; letter-spacing:2px; }
+    .club-crest { width:40px; height:40px; flex:none; object-fit:contain; }
+    .brand-name .highlight { color:var(--yellow); -webkit-text-stroke:1px var(--navy); }
     nav { display:flex; gap:18px; flex-wrap:wrap; }
     nav a { color:var(--navy); text-decoration:none; font:700 13px 'Barlow Condensed',sans-serif; letter-spacing:1px; text-transform:uppercase; }
     nav a[aria-current="page"] { border-bottom:2px solid var(--yellow); padding-bottom:4px; }
@@ -27,7 +28,16 @@
     main { padding-top:32px; padding-bottom:48px; }
     .summary { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
     .stats { color:var(--muted); font-size:14px; }
-    .filter { min-width:220px; padding:10px 12px; border:1px solid var(--border); border-radius:6px; color:var(--navy); background:#fff; font:600 15px Barlow,sans-serif; }
+    .team-filter { position:relative; min-width:220px; }
+    .filter-trigger { width:100%; min-height:44px; padding:6px 12px; display:flex; align-items:center; gap:10px; border:1px solid var(--border); border-radius:6px; color:var(--navy); background:#fff; font:600 15px Barlow,sans-serif; text-align:left; cursor:pointer; }
+    .filter-trigger::after { content:'⌄'; margin-left:auto; font-size:18px; }
+    .filter-trigger:focus-visible, .filter-option:focus-visible { outline:3px solid #315ca8; outline-offset:2px; }
+    .filter-trigger .club-crest { width:30px; height:30px; }
+    .filter-menu { position:absolute; z-index:5; top:calc(100% + 4px); left:0; right:0; max-height:280px; overflow:auto; padding:4px; border:1px solid var(--border); border-radius:7px; background:#fff; box-shadow:0 8px 24px #0f1d3326; }
+    .team-filter:not([open]) .filter-menu { display:none; }
+    .filter-option { width:100%; padding:7px 8px; display:flex; align-items:center; gap:10px; border:0; border-radius:4px; color:var(--navy); background:#fff; font:600 14px Barlow,sans-serif; text-align:left; cursor:pointer; }
+    .filter-option:hover, .filter-option[aria-selected="true"] { background:#f0f2f6; }
+    .filter-option .club-crest { width:28px; height:28px; }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr)); gap:14px; }
     .result { overflow:hidden; border:1px solid var(--border); border-radius:10px; background:var(--card); animation:appear .35s both; }
     .result-top { padding:13px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; border-bottom:1px solid var(--border); }
@@ -46,12 +56,12 @@
     .empty { grid-column:1/-1; padding:32px 18px; border:1px dashed var(--border); border-radius:10px; color:var(--muted); text-align:center; }
     footer { padding-top:18px; padding-bottom:24px; display:flex; justify-content:space-between; gap:16px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; }
     @keyframes appear { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    @media(max-width:560px) { header { align-items:flex-start; flex-direction:column; } .summary { align-items:stretch; flex-direction:column; } .filter { width:100%; } .team { font-size:16px; } .match { gap:8px; } .score { gap:6px; padding:8px; font-size:22px; } footer { flex-direction:column; } }
+    @media(max-width:560px) { header { align-items:flex-start; flex-direction:column; } .summary { align-items:stretch; flex-direction:column; } .team-filter { width:100%; } .team { font-size:16px; } .match { gap:8px; } .score { gap:6px; padding:8px; font-size:22px; } footer { flex-direction:column; } }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand">HA <span>BASKET</span></div>
+    <div class="brand"><img class="club-crest" src="https://www.fbm.es/imagenes/clubes/20677/logo.jpg" alt="Escudo de Highstep Academy"><span class="brand-name">HA <span class="highlight">BASKET</span></span></div>
     <nav aria-label="Fuente de resultados">
       <a href="https://www.fbm.es/resultados-club-20677/highstep-academy" target="_blank" rel="noopener noreferrer">Fuente FBM ↗</a>
     </nav>
@@ -70,7 +80,10 @@
       </div>
       <label>
         <span class="section-label" style="display:block;margin-bottom:6px">Equipo</span>
-        <select class="filter" id="filtro-equipo" aria-label="Filtrar por equipo"><option value="">Todos los equipos</option></select>
+        <details class="team-filter" id="filtro-equipo">
+          <summary class="filter-trigger" aria-label="Filtrar por equipo"><img class="club-crest" src="https://www.fbm.es/imagenes/clubes/20677/logo.jpg" alt=""><span id="equipo-seleccionado">Todos los equipos</span></summary>
+          <div class="filter-menu" id="opciones-equipo" role="listbox" aria-label="Equipos"></div>
+        </details>
       </label>
     </div>
     <div class="grid" id="resultados" aria-live="polite"></div>
@@ -111,15 +124,32 @@
           { value: equipoFilterKey(result), label: equipoFilterLabel(result) }
         ])).values()].sort((a,b) => a.label.localeCompare(b.label,'es'));
         const filtro = document.getElementById('filtro-equipo');
-        equipos.forEach(equipo => filtro.add(new Option(equipo.label,equipo.value)));
+        const opciones = document.getElementById('opciones-equipo');
+        const etiquetaSeleccionada = document.getElementById('equipo-seleccionado');
+        const escudo = 'https://www.fbm.es/imagenes/clubes/20677/logo.jpg';
+        const opcionesFiltro = [{value:'', label:'Todos los equipos'}, ...equipos];
+        opciones.innerHTML = opcionesFiltro.map(equipo => `<button class="filter-option" type="button" role="option" aria-selected="${equipo.value === ''}" data-value="${esc(equipo.value)}"><img class="club-crest" src="${escudo}" alt=""><span>${esc(equipo.label)}</span></button>`).join('');
+        let valorFiltro = '';
+        opciones.addEventListener('click', event => {
+          const opcion = event.target.closest('.filter-option');
+          if (!opcion) return;
+          valorFiltro = opcion.dataset.value;
+          etiquetaSeleccionada.textContent = opcionesFiltro.find(equipo => equipo.value === valorFiltro)?.label || 'Todos los equipos';
+          opciones.querySelectorAll('.filter-option').forEach(item => item.setAttribute('aria-selected', String(item === opcion)));
+          filtro.open = false;
+          mostrar();
+        });
+        document.addEventListener('click', event => { if (!filtro.contains(event.target)) filtro.open = false; });
+        filtro.addEventListener('keydown', event => {
+          if (event.key === 'Escape') { filtro.open = false; filtro.querySelector('summary').focus(); }
+        });
 
         const mostrar = () => {
-          const elegidos = resultados.filter(r => !filtro.value || equipoFilterKey(r) === filtro.value);
+          const elegidos = resultados.filter(r => !valorFiltro || equipoFilterKey(r) === valorFiltro);
           conteo.textContent = `${elegidos.length} resultado${elegidos.length === 1 ? '' : 's'} · ${equipos.length} equipo${equipos.length === 1 ? '' : 's'}`;
           grid.innerHTML = elegidos.length ? elegidos.map(card).join('') : '<div class="empty">No hay resultados para este equipo.</div>';
         };
 
-        filtro.addEventListener('change', mostrar);
         mostrar();
         document.getElementById('updated').textContent = data.actualizado
           ? 'Actualizado: ' + new Date(data.actualizado).toLocaleString('es-ES')
