@@ -13,7 +13,7 @@
     * { box-sizing:border-box; margin:0; padding:0; }
     body { min-height:100vh; color:var(--ink); background:var(--paper); font-family:Barlow,Arial,sans-serif; }
     .site-header { background:var(--navy); color:var(--white); }
-    .header-inner, .hero-inner, main, footer { width:min(1180px,100%); margin:auto; padding-left:clamp(20px,5vw,72px); padding-right:clamp(20px,5vw,72px); }
+    .header-inner, main, footer { width:min(1180px,100%); margin:auto; padding-left:clamp(20px,5vw,72px); padding-right:clamp(20px,5vw,72px); }
     .header-inner { min-height:82px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
     .brand { display:flex; align-items:center; gap:12px; color:var(--white); text-decoration:none; font:25px 'Bebas Neue',sans-serif; letter-spacing:1.5px; }
     .club-crest { width:44px; height:44px; flex:none; object-fit:contain; }
@@ -23,25 +23,8 @@
     nav { display:flex; gap:18px; flex-wrap:wrap; align-items:center; }
     nav a { padding:10px 15px; border:1px solid #ffffff32; border-radius:999px; color:var(--white); text-decoration:none; font:700 12px 'Barlow Condensed',sans-serif; letter-spacing:1px; text-transform:uppercase; transition:background .2s,border-color .2s; }
     nav a:hover { border-color:var(--yellow); background:#ffffff0c; }
-    .hero { position:relative; overflow:hidden; color:var(--white); background:radial-gradient(ellipse at 82% 0%,#263b5c 0,transparent 38%),linear-gradient(118deg,var(--navy) 0%,#142641 58%,#0c1729 100%); }
-    .hero::after { position:absolute; right:-100px; bottom:-250px; width:600px; height:600px; border:1px solid #ffffff0c; border-radius:50%; content:""; box-shadow:0 0 0 38px #ffffff06,0 0 0 78px #ffffff04; }
-    .hero-inner { position:relative; z-index:1; min-height:330px; padding-top:48px; padding-bottom:36px; display:flex; align-items:center; justify-content:space-between; gap:32px; }
-    .hero-copy { max-width:690px; }
-    .eyebrow, .section-label { color:var(--muted); font:700 11px 'Barlow Condensed',sans-serif; letter-spacing:2.5px; text-transform:uppercase; }
-    .hero .eyebrow { display:flex; align-items:center; gap:9px; color:#c5cfdd; }
-    .eyebrow-mark { width:7px; height:7px; border-radius:50%; background:var(--yellow); box-shadow:0 0 0 4px #f7d10c24; }
-    h1 { margin-top:18px; color:var(--white); font:clamp(48px,7.5vw,82px)/.91 'Bebas Neue',sans-serif; letter-spacing:.5px; }
-    h1 em { color:var(--yellow); font-style:normal; }
-    .hero-copy p { max-width:470px; margin-top:17px; color:#c5cfdd; font-size:15px; line-height:1.6; }
-    .hero-crest { width:clamp(150px,22vw,236px); height:clamp(150px,22vw,236px); flex:none; object-fit:contain; opacity:.94; filter:drop-shadow(0 16px 28px #0005); }
-    .hero-stats { position:relative; z-index:2; margin-top:-1px; background:var(--yellow); color:var(--navy); }
-    .stats-inner { width:min(1180px,100%); min-height:80px; margin:auto; padding:14px clamp(20px,5vw,72px); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
-    .stat { padding:2px 24px; display:flex; align-items:center; gap:12px; border-right:1px solid #0f1d3330; }
-    .stat:first-child { padding-left:0; }
-    .stat:last-child { border:0; }
-    .stat-number { font:31px/.9 'Bebas Neue',sans-serif; }
-    .stat-label { max-width:90px; font:700 10px/1.25 'Barlow Condensed',sans-serif; letter-spacing:1px; text-transform:uppercase; }
-    main { padding-top:42px; padding-bottom:60px; }
+    .section-label { color:var(--muted); font:700 11px 'Barlow Condensed',sans-serif; letter-spacing:2.5px; text-transform:uppercase; }
+    main { padding-top:40px; padding-bottom:60px; }
     .summary { margin-bottom:20px; display:flex; justify-content:space-between; align-items:end; gap:20px; }
     .summary-copy .section-label { color:#6c7a8d; }
     h2 { margin-top:5px; color:var(--navy); font:36px/1 'Bebas Neue',sans-serif; letter-spacing:.5px; }
@@ -69,13 +52,10 @@
     .round { margin-top:4px; color:var(--navy); font:700 14px 'Barlow Condensed',sans-serif; }
     .date { flex:none; padding:6px 9px; border-radius:6px; color:#5c6879; background:#f2f4f7; font:700 11px 'Barlow Condensed',sans-serif; letter-spacing:.4px; }
     .match { min-height:118px; padding:18px 18px 15px 21px; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:10px; }
-    .team-block { min-width:0; display:flex; align-items:center; gap:9px; }
-    .team-block.local { justify-content:flex-end; }
-    .team-block.visitor { justify-content:flex-start; }
+    .team-block { min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; }
     .team-name { min-width:0; color:var(--navy); font:700 16px/1.15 'Barlow Condensed',sans-serif; overflow-wrap:anywhere; }
-    .team-block.local .team-name { text-align:right; }
     .team-side { display:block; margin-top:4px; color:#8994a4; font:600 9px Barlow,sans-serif; letter-spacing:1px; text-transform:uppercase; }
-    .team-logo { width:42px; height:42px; flex:none; padding:3px; object-fit:contain; border:1px solid #edf0f4; border-radius:50%; background:var(--white); }
+    .team-logo { width:70px; height:70px; flex:none; padding:4px; object-fit:contain; border:1px solid #edf0f4; border-radius:16px; background:var(--white); }
     .scoreboard { min-width:87px; text-align:center; }
     .final-label { display:block; margin-bottom:6px; color:#9aa4b2; font:700 9px 'Barlow Condensed',sans-serif; letter-spacing:1.8px; }
     .score { display:flex; align-items:center; justify-content:center; gap:7px; color:var(--navy); font:700 27px/1 'Barlow Condensed',sans-serif; white-space:nowrap; }
@@ -93,9 +73,9 @@
     .empty { grid-column:1/-1; padding:42px 20px; border:1px dashed #cfd6e0; border-radius:15px; color:var(--muted); background:#ffffff9e; text-align:center; }
     footer { padding-top:18px; padding-bottom:24px; display:flex; justify-content:space-between; gap:16px; border-top:1px solid #e1e6ee; color:var(--muted); font-size:12px; }
     @keyframes appear { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    @media(max-width:760px) { .grid { grid-template-columns:1fr; } .hero-inner { min-height:290px; } }
-    @media(max-width:560px) { .header-inner { min-height:72px; } nav a { padding:9px 11px; font-size:10px; } .brand { font-size:22px; } .club-crest { width:38px; height:38px; } .hero-inner { min-height:0; padding-top:38px; padding-bottom:34px; } .hero-crest { width:96px; height:96px; align-self:flex-start; margin-top:12px; } .hero-copy p { max-width:310px; font-size:14px; } h1 { font-size:56px; } .stats-inner { min-height:70px; padding-top:12px; padding-bottom:12px; } .stat { padding:2px 12px; gap:7px; } .stat-number { font-size:26px; } .stat-label { font-size:8px; letter-spacing:.6px; } main { padding-top:32px; } .summary { align-items:stretch; flex-direction:column; gap:18px; } .filter-label { width:100%; } h2 { font-size:32px; } .grid { gap:12px; } .result-top { min-height:62px; padding:11px 12px 10px 16px; } .category { font-size:9px; } .match { min-height:105px; gap:5px; padding:14px 10px 12px 15px; } .team-block { gap:5px; } .team-name { font-size:15px; } .team-side { font-size:8px; } .team-logo { width:34px; height:34px; padding:2px; } .scoreboard { min-width:70px; } .score { gap:4px; font-size:23px; } .final-label { margin-bottom:5px; font-size:8px; } .result-bottom { min-height:39px; padding:8px 12px 9px 16px; } footer { flex-direction:column; } }
-    @media(max-width:370px) { .hero-crest { width:74px; height:74px; } .match { grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr); } .team-name { font-size:13px; } .team-logo { width:28px; height:28px; } }
+    @media(max-width:760px) { .grid { grid-template-columns:1fr; } }
+    @media(max-width:560px) { .header-inner { min-height:72px; } nav a { padding:9px 11px; font-size:10px; } .brand { font-size:22px; } .club-crest { width:38px; height:38px; } main { padding-top:32px; } .summary { align-items:stretch; flex-direction:column; gap:18px; } .filter-label { width:100%; } h2 { font-size:32px; } .grid { gap:12px; } .result-top { min-height:62px; padding:11px 12px 10px 16px; } .category { font-size:9px; } .match { min-height:145px; gap:5px; padding:14px 10px 12px 15px; } .team-name { font-size:15px; } .team-side { font-size:8px; } .team-logo { width:58px; height:58px; padding:3px; border-radius:13px; } .scoreboard { min-width:70px; } .score { gap:4px; font-size:23px; } .final-label { margin-bottom:5px; font-size:8px; } .result-bottom { min-height:39px; padding:8px 12px 9px 16px; } footer { flex-direction:column; } }
+    @media(max-width:370px) { .match { grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr); } .team-name { font-size:13px; } .team-logo { width:50px; height:50px; } }
   </style>
 </head>
 <body>
@@ -107,23 +87,6 @@
     </nav>
     </div>
   </header>
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <div class="eyebrow"><span class="eyebrow-mark"></span> Temporada de competición · 2026/27</div>
-        <h1>El juego se mide<br><em>en equipo.</em></h1>
-        <p>Todos los marcadores de HA Basket, reunidos en un solo lugar. Sigue cada categoría y cada jornada.</p>
-      </div>
-      <img class="hero-crest" src="https://www.fbm.es/imagenes/clubes/20677/logo.jpg" alt="Escudo de Highstep Academy">
-    </div>
-  </section>
-  <section class="hero-stats" aria-label="Resumen de la temporada">
-    <div class="stats-inner">
-      <div class="stat"><span class="stat-number" id="hero-partidos">—</span><span class="stat-label">Partidos jugados</span></div>
-      <div class="stat"><span class="stat-number" id="hero-victorias">—</span><span class="stat-label">Victorias</span></div>
-      <div class="stat"><span class="stat-number" id="hero-equipos">—</span><span class="stat-label">Equipos</span></div>
-    </div>
-  </section>
   <main>
     <div class="summary">
       <div class="summary-copy">
@@ -171,7 +134,7 @@
       const logo = (src, name) => src ? `<img class="team-logo" src="${esc(src)}" alt="Escudo de ${esc(name)}" loading="lazy" onerror="this.hidden=true">` : '';
       return `<article class="result" style="animation-delay:${Math.min(index,12)*35}ms">
         <div class="result-top"><div class="competition"><div class="category">${esc(result.categoria)}</div><div class="round">${esc(result.jornada || 'Jornada')}</div></div><time class="date">${esc(result.fecha)}</time></div>
-        <div class="match"><div class="team-block local"><span class="team-name">${esc(result.equipoLocal)}<small class="team-side">Local</small></span>${logo(escudoEquipo(result,'Local'),result.equipoLocal)}</div><div class="scoreboard"><span class="final-label">FINAL</span><div class="score"><span>${esc(result.puntosLocal)}</span><span class="colon">:</span><span>${esc(result.puntosVisitante)}</span></div></div><div class="team-block visitor">${logo(escudoEquipo(result,'Visitante'),result.equipoVisitante)}<span class="team-name">${esc(result.equipoVisitante)}<small class="team-side">Visitante</small></span></div></div>
+        <div class="match"><div class="team-block local">${logo(escudoEquipo(result,'Local'),result.equipoLocal)}<span class="team-name">${esc(result.equipoLocal)}<small class="team-side">Local</small></span></div><div class="scoreboard"><span class="final-label">FINAL</span><div class="score"><span>${esc(result.puntosLocal)}</span><span class="colon">:</span><span>${esc(result.puntosVisitante)}</span></div></div><div class="team-block visitor">${logo(escudoEquipo(result,'Visitante'),result.equipoVisitante)}<span class="team-name">${esc(result.equipoVisitante)}<small class="team-side">Visitante</small></span></div></div>
         <div class="result-bottom"><span class="badge ${esc(result.balance)}">${esc(result.equipoHA)} · ${esc(result.balance)}</span><span class="result-hint">Marcador final</span></div>
       </article>`;
     }
@@ -188,9 +151,6 @@
           equipoFilterKey(result),
           { value: equipoFilterKey(result), label: equipoFilterLabel(result) }
         ])).values()].sort((a,b) => a.label.localeCompare(b.label,'es'));
-        document.getElementById('hero-partidos').textContent = resultados.length;
-        document.getElementById('hero-victorias').textContent = resultados.filter(result => result.balance === 'victoria').length;
-        document.getElementById('hero-equipos').textContent = equipos.length;
         const filtro = document.getElementById('filtro-equipo');
         const opciones = document.getElementById('opciones-equipo');
         const etiquetaSeleccionada = document.getElementById('equipo-seleccionado');
