@@ -16,9 +16,11 @@ async function obtenerResultados(page) {
     // Buscamos la fecha sin exigir separador después del año.
     const datePattern = /\d{1,2}\/\d{1,2}\/\d{4}/;
     const scorePattern = /^\d+$/;
-    const headingSelector = 'h1,h2,h3,h4,h5,h6';
     const resultados = [];
-    const tablas = [...root.querySelectorAll('table')];
+    const nodosOrdenados = [...root.querySelectorAll('.pestana-subdesplegable, h1,h2,h3,h4,h5,h6, table')];
+    let categoriaActual = '';
+    let jornadaActual = '';
+    const tablas = [];
     const diagnostico = {
       filas: 0,
       filasConFecha: 0,
@@ -28,13 +30,18 @@ async function obtenerResultados(page) {
       ejemplosHA: []
     };
 
-    for (const table of tablas) {
-      const competicionNode = table.closest('[id^="capa_competicion_calendario_"]') || root;
-      const categoria = clean(competicionNode.querySelector(headingSelector)?.innerText);
-      const precedingHeadings = [...competicionNode.querySelectorAll(headingSelector)]
-        .filter((heading) => heading.compareDocumentPosition(table) & Node.DOCUMENT_POSITION_FOLLOWING);
-      const jornadaHeading = precedingHeadings.reverse().find((heading) => isTeamHeading(clean(heading.innerText)));
-      const jornada = clean(jornadaHeading?.innerText);
+    for (const node of nodosOrdenados) {
+      const text = clean(node.innerText);
+      if (node.matches('.pestana-subdesplegable')) {
+        categoriaActual = text;
+      } else if (node.matches('h1,h2,h3,h4,h5,h6') && isTeamHeading(text)) {
+        jornadaActual = text;
+      } else if (node.matches('table')) {
+        tablas.push({ table: node, categoria: categoriaActual, jornada: jornadaActual });
+      }
+    }
+
+    for (const { table, categoria, jornada } of tablas) {
 
       for (const row of [...table.querySelectorAll('tr')]) {
         diagnostico.filas++;
