@@ -1,0 +1,41 @@
+name: Actualizar resultados HA Basket
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Recopilar resultados
+        run: npm run scrape
+
+      - name: Guardar JSON actualizado
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add public/resultados.json
+          git commit -m "Actualizar resultados" || echo "Sin cambios"
+          git push
+
+      - name: Guardar artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-ha-basket
+          path: public/resultados.json

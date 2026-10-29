@@ -1,0 +1,17 @@
+{
+  "name": "ha-basket-resultados",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Resultados oficiales de los equipos de HA Basket obtenidos de la FBM",
+  "main": "scraper.js",
+  "scripts": {
+    "scrape": "node scraper.js",
+    "start": "node scraper.js"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
