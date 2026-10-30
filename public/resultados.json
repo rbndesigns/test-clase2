@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-10-29T14:14:35.760Z",
+  "actualizado": "2026-10-30T09:18:07.397Z",
   "fuente": "https://www.fbm.es/resultados-club-20677/highstep-academy",
   "total": 12,
   "resultados": [
@@ -17,7 +17,9 @@
       "condicion": "local",
       "resultadoHA": 78,
       "resultadoRival": 53,
-      "balance": "victoria"
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20674/logo.jpg"
     },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
@@ -33,7 +35,9 @@
       "condicion": "local",
       "resultadoHA": 58,
       "resultadoRival": 42,
-      "balance": "victoria"
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20678/logo.jpg"
     },
     {
       "categoria": "Cadete Masc. Pref. - PRIMERA 3ª DIVISION - GRUPO 3",
@@ -49,7 +53,9 @@
       "condicion": "visitante",
       "resultadoHA": 45,
       "resultadoRival": 58,
-      "balance": "derrota"
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/6881/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
     },
     {
       "categoria": "Infantil Masc. Pref. - PRIMERA 2ª DIVISION - GRUPO 1",
@@ -65,7 +71,9 @@
       "condicion": "visitante",
       "resultadoHA": 51,
       "resultadoRival": 67,
-      "balance": "derrota"
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/16063/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
     },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
@@ -81,7 +89,9 @@
       "condicion": "visitante",
       "resultadoHA": 44,
       "resultadoRival": 53,
-      "balance": "derrota"
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/13330/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
     },
     {
       "categoria": "Cadete Masc. Pref. - PRIMERA 3ª DIVISION - GRUPO 3",
@@ -97,7 +107,9 @@
       "condicion": "local",
       "resultadoHA": 32,
       "resultadoRival": 63,
-      "balance": "derrota"
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/17760/logo.jpg"
     },
     {
       "categoria": "Infantil Masc. Pref. - PRIMERA 2ª DIVISION - GRUPO 1",
@@ -113,7 +125,9 @@
       "condicion": "local",
       "resultadoHA": 41,
       "resultadoRival": 64,
-      "balance": "derrota"
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/6283/logo.jpg"
     },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
@@ -129,7 +143,9 @@
       "condicion": "local",
       "resultadoHA": 41,
       "resultadoRival": 30,
-      "balance": "victoria"
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20525/logo.jpg"
     },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
@@ -145,7 +161,9 @@
       "condicion": "visitante",
       "resultadoHA": 40,
       "resultadoRival": 35,
-      "balance": "victoria"
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/19201/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
     },
     {
       "categoria": "Cadete Masc. Pref. - PRIMERA 3ª DIVISION - GRUPO 3",
@@ -161,7 +179,9 @@
       "condicion": "visitante",
       "resultadoHA": 43,
       "resultadoRival": 79,
-      "balance": "derrota"
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20012/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
     },
     {
       "categoria": "Infantil Masc. Pref. - PRIMERA 2ª DIVISION - GRUPO 1",
@@ -177,7 +197,9 @@
       "condicion": "visitante",
       "resultadoHA": 28,
       "resultadoRival": 64,
-      "balance": "derrota"
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/6337/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
     },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
@@ -193,7 +215,9 @@
       "condicion": "local",
       "resultadoHA": 70,
       "resultadoRival": 35,
-      "balance": "victoria"
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/12493/logo.jpg"
     }
   ]
 }
