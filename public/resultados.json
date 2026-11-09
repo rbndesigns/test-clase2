@@ -1,8 +1,26 @@
 {
-  "actualizado": "2026-11-08T09:43:07.925Z",
+  "actualizado": "2026-11-09T10:37:53.633Z",
   "fuente": "https://www.fbm.es/resultados-club-20677/highstep-academy",
-  "total": 15,
+  "total": 16,
   "resultados": [
+    {
+      "categoria": "2ª Div Aut Masc BRONCE - PRIMERA FASE - GRUPO 1",
+      "jornada": "Jornada 3 - 08/11/2026",
+      "fecha": "08/11/2026",
+      "equipoLocal": "VALLEKAS BASKET",
+      "puntosLocal": 64,
+      "equipoVisitante": "HA BASKET",
+      "puntosVisitante": 67,
+      "campo": "ENTREVIAS, PDVO. MPAL.RONDA DEL SUR esquina STA. RAFAELA MARIA DEL , Madrid",
+      "equipoHA": "HA BASKET",
+      "rival": "VALLEKAS BASKET",
+      "condicion": "visitante",
+      "resultadoHA": 67,
+      "resultadoRival": 64,
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20525/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
+    },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
       "jornada": "Jornada 6 - 08/11/2026",
