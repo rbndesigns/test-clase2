@@ -1,8 +1,26 @@
 {
-  "actualizado": "2026-11-15T10:10:27.937Z",
+  "actualizado": "2026-11-16T10:23:11.159Z",
   "fuente": "https://www.fbm.es/resultados-club-20677/highstep-academy",
-  "total": 19,
+  "total": 20,
   "resultados": [
+    {
+      "categoria": "2ª Div Aut Masc BRONCE - PRIMERA FASE - GRUPO 1",
+      "jornada": "Jornada 4 - 15/11/2026",
+      "fecha": "15/11/2026",
+      "equipoLocal": "HA BASKET",
+      "puntosLocal": 72,
+      "equipoVisitante": "RESTAURANTE PAIPAI PUREZA DE MARIA",
+      "puntosVisitante": 51,
+      "campo": "ARGANZUELA, CENTRO INTEGRADOC/ PALOS DE LA FRONTERA, 40, Madrid",
+      "equipoHA": "HA BASKET",
+      "rival": "RESTAURANTE PAIPAI PUREZA DE MARIA",
+      "condicion": "local",
+      "resultadoHA": 72,
+      "resultadoRival": 51,
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/6897/logo.jpg"
+    },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
       "jornada": "Jornada 7 - 15/11/2026",
