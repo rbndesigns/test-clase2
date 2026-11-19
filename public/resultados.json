@@ -1,8 +1,26 @@
 {
-  "actualizado": "2026-11-18T10:54:34.118Z",
+  "actualizado": "2026-11-19T10:55:47.944Z",
   "fuente": "https://www.fbm.es/resultados-club-20677/highstep-academy",
-  "total": 20,
+  "total": 21,
   "resultados": [
+    {
+      "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
+      "jornada": "Jornada 8 - 22/11/2026",
+      "fecha": "18/11/2026",
+      "equipoLocal": "C.B. GETAFE \"LOPEZ\"",
+      "puntosLocal": 65,
+      "equipoVisitante": "HA BASKET",
+      "puntosVisitante": 58,
+      "campo": "GREENFIELD, PABELLON COLEGIOCARR. DE CARABANCHEL A VILLAVERDE, 82, Madrid",
+      "equipoHA": "HA BASKET",
+      "rival": "C.B. GETAFE \"LOPEZ\"",
+      "condicion": "visitante",
+      "resultadoHA": 58,
+      "resultadoRival": 65,
+      "balance": "derrota",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/17744/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
+    },
     {
       "categoria": "2ª Div Aut Masc BRONCE - PRIMERA FASE - GRUPO 1",
       "jornada": "Jornada 4 - 15/11/2026",
