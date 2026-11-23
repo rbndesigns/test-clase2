@@ -1,8 +1,26 @@
 {
-  "actualizado": "2026-11-22T10:31:20.659Z",
+  "actualizado": "2026-11-23T11:32:22.158Z",
   "fuente": "https://www.fbm.es/resultados-club-20677/highstep-academy",
-  "total": 23,
+  "total": 24,
   "resultados": [
+    {
+      "categoria": "2ª Div Aut Masc BRONCE - PRIMERA FASE - GRUPO 1",
+      "jornada": "Jornada 5 - 22/11/2026",
+      "fecha": "22/11/2026",
+      "equipoLocal": "HA BASKET",
+      "puntosLocal": 70,
+      "equipoVisitante": "ESCOLAPIOS DE ALCALA C.D.C.",
+      "puntosVisitante": 65,
+      "campo": "GREENFIELD, PABELLON COLEGIOCARR. DE CARABANCHEL A VILLAVERDE, 82, Madrid",
+      "equipoHA": "HA BASKET",
+      "rival": "ESCOLAPIOS DE ALCALA C.D.C.",
+      "condicion": "local",
+      "resultadoHA": 70,
+      "resultadoRival": 65,
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/6788/logo.jpg"
+    },
     {
       "categoria": "Cadete Masc. Pref. - PRIMERA 3ª DIVISION - GRUPO 3",
       "jornada": "Jornada 6 - 22/11/2026",
