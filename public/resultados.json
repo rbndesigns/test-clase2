@@ -1,8 +1,26 @@
 {
-  "actualizado": "2026-11-23T11:32:22.158Z",
+  "actualizado": "2026-11-26T11:42:58.124Z",
   "fuente": "https://www.fbm.es/resultados-club-20677/highstep-academy",
-  "total": 24,
+  "total": 25,
   "resultados": [
+    {
+      "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
+      "jornada": "Jornada 11 - 20/12/2026",
+      "fecha": "25/11/2026",
+      "equipoLocal": "HUMANITAS C.D.E.",
+      "puntosLocal": 56,
+      "equipoVisitante": "HA BASKET",
+      "puntosVisitante": 62,
+      "campo": "HUMANITAS, PABELLON COLEGIOAVDA. SALVADOR DALI, 3, Torrejón de Ardoz",
+      "equipoHA": "HA BASKET",
+      "rival": "HUMANITAS C.D.E.",
+      "condicion": "visitante",
+      "resultadoHA": 62,
+      "resultadoRival": 56,
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/20533/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
+    },
     {
       "categoria": "2ª Div Aut Masc BRONCE - PRIMERA FASE - GRUPO 1",
       "jornada": "Jornada 5 - 22/11/2026",
