@@ -1,8 +1,26 @@
 {
-  "actualizado": "2026-11-27T11:36:59.865Z",
+  "actualizado": "2026-11-28T11:07:51.447Z",
   "fuente": "https://www.fbm.es/resultados-club-20677/highstep-academy",
-  "total": 25,
+  "total": 26,
   "resultados": [
+    {
+      "categoria": "Infantil Masc. Pref. - PRIMERA 2ª DIVISION - GRUPO 1",
+      "jornada": "Jornada 7 - 29/11/2026",
+      "fecha": "28/11/2026",
+      "equipoLocal": "LA PAZ C.D.",
+      "puntosLocal": 38,
+      "equipoVisitante": "HA BASKET",
+      "puntosVisitante": 62,
+      "campo": "MIGUEL DELIBES, C.P.FELIPE II, 15 (entrada por Jaime I El Conquistador), Parla",
+      "equipoHA": "HA BASKET",
+      "rival": "LA PAZ C.D.",
+      "condicion": "visitante",
+      "resultadoHA": 62,
+      "resultadoRival": 38,
+      "balance": "victoria",
+      "escudoLocal": "https://www.fbm.es/imagenes/clubes/6265/logo.jpg",
+      "escudoVisitante": "https://www.fbm.es/imagenes/clubes/20677/logo.jpg"
+    },
     {
       "categoria": "Junior Masc. Pref. - PRIMERA 4ª DIVISION - GRUPO 3",
       "jornada": "Jornada 11 - 20/12/2026",
